@@ -95,7 +95,7 @@ export default function HomePage() {
               <div className="relative">
                 <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl p-2 shadow-2xl">
                   <img
-                    src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
+                    src="/banner.jpeg"
                     alt="AI Analysis Results Dashboard"
                     className="w-full h-full object-cover rounded-xl"
                   />

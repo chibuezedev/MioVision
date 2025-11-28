@@ -47,6 +47,15 @@ export default function ExaminationPage() {
               className="pl-10"
             />
           </div>
+
+          <Button
+            onClick={() => fetchExaminations()}
+            aria-label="Refresh examinations"
+            className="whitespace-nowrap"
+          >
+            Refresh
+          </Button>
+
           <Button
             onClick={() => setShowForm(!showForm)}
             className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"

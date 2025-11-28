@@ -370,7 +370,7 @@ export default function ExaminationDetailPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium">
-                          Left Eye Vision
+                          SPHRLE
                         </label>
                         <Input
                           type="number"
@@ -383,7 +383,7 @@ export default function ExaminationDetailPage() {
                       </div>
                       <div>
                         <label className="text-sm font-medium">
-                          Right Eye Vision
+                          SPHRRE
                         </label>
                         <Input
                           type="number"
@@ -441,7 +441,7 @@ export default function ExaminationDetailPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-muted-foreground">
-                          Left Eye Vision
+                          SPHRLE
                         </p>
                         <p className="text-lg font-semibold">
                           {examination.leftEyeVision || "N/A"}
@@ -449,7 +449,7 @@ export default function ExaminationDetailPage() {
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">
-                          Right Eye Vision
+                         SPHRRE
                         </p>
                         <p className="text-lg font-semibold">
                           {examination.rightEyeVision || "N/A"}

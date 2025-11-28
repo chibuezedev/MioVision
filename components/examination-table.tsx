@@ -30,8 +30,8 @@ export default function ExaminationTable({
             <th className="text-left py-3 px-4 font-semibold">
               Examination Date
             </th>
-            <th className="text-left py-3 px-4 font-semibold">Left Eye</th>
-            <th className="text-left py-3 px-4 font-semibold">Right Eye</th>
+            <th className="text-left py-3 px-4 font-semibold">SPHRLE</th>
+            <th className="text-left py-3 px-4 font-semibold">SPHRRE</th>
             <th className="text-left py-3 px-4 font-semibold">Notes</th>
             <th className="text-right py-3 px-4 font-semibold">Actions</th>
           </tr>

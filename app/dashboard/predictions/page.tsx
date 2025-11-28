@@ -54,6 +54,13 @@ export default function PredictionsPage() {
             />
           </div>
           <Button
+            onClick={() => fetchPredictions()}
+            aria-label="Refresh predictions"
+            className="whitespace-nowrap"
+          >
+            Refresh
+          </Button>
+          <Button
             onClick={() => setShowDetector(!showDetector)}
             className="bg-accent hover:bg-accent/90 text-accent-foreground gap-2"
           >
@@ -83,7 +90,7 @@ export default function PredictionsPage() {
           ) : (
             filteredPredictions.map((pred, index) => (
               <Card
-               key={`${pred._id}-${index}`}
+                key={`${pred._id}-${index}`}
                 className="overflow-hidden hover:shadow-md transition-shadow"
               >
                 {/* Summary Row */}

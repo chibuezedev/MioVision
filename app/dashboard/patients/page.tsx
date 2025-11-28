@@ -51,10 +51,17 @@ export default function PatientsPage() {
             />
           </div>
           <Button
+            onClick={() => fetchPatients()}
+            aria-label="Refresh patients"
+            className="whitespace-nowrap"
+          >
+            Refresh
+          </Button>
+          <Button
             onClick={() => setShowForm(!showForm)}
             className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 cursor-pointer"
           >
-            {showForm ? <X size={20} /> : <Plus size={20} /> }
+            {showForm ? <X size={20} /> : <Plus size={20} />}
             {showForm ? "Close" : "Register Patient"}
           </Button>
         </div>

@@ -99,28 +99,26 @@ const handleSubmit = async (e: React.FormEvent) => {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-semibold mb-2">Left Eye Vision *</label>
+          <label className="block text-sm font-semibold mb-2">Spherical refraction of left eye (SPHRLE)  *</label>
           <Input
             type="number"
             step="0.1"
             name="leftEyeVision"
-            placeholder="0.0 - 1.0"
+            placeholder="If not measured, leave blank"
             value={formData.leftEyeVision}
             onChange={handleChange}
-            required
             disabled={isLoading}
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold mb-2">Right Eye Vision *</label>
+          <label className="block text-sm font-semibold mb-2">Spherical refraction of right eye (SPHRRE) *</label>
           <Input
             type="number"
             step="0.1"
             name="rightEyeVision"
-            placeholder="0.0 - 1.0"
+            placeholder="If not measured, leave blank"
             value={formData.rightEyeVision}
             onChange={handleChange}
-            required
             disabled={isLoading}
           />
         </div>
