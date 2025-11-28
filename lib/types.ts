@@ -58,7 +58,7 @@ export interface MyopiaPrediction {
   predictedAt: Date;
   probabilityNormal: number;
   probabilityMyopia: number;
-  mlPrediction: string
+  mlPrediction: string;
 }
 
 export interface ApiResponse<T> {

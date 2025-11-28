@@ -56,6 +56,34 @@ export const examinationService = {
     return response.data || ({} as Examination);
   },
 
+  async uploadExaminationImage(
+    id: string,
+    file: File
+  ): Promise<{ imageUrl: string }> {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
+      }/examinations/${id}/upload-image`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken") || ""}`,
+        },
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const result = await response.json();
+    return result.data || {};
+  },
+
   async deleteExamination(id: string): Promise<void> {
     await apiClient.delete(`/examinations/${id}`);
   },

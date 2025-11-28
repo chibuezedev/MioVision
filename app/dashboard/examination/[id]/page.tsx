@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +14,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Edit2, Save, X, Loader2 } from "lucide-react";
+import { ArrowLeft, Edit2, Save, X, Loader2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useExaminations } from "@/context/examinations-context";
 import { useToast } from "@/hooks/use-toast";
+import { examinationService } from "@/lib/examination-service";
 
 export default function ExaminationDetailPage() {
   const params = useParams();
@@ -33,7 +34,10 @@ export default function ExaminationDetailPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [formData, setFormData] = useState<any>({});
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchExamination = async () => {
@@ -43,6 +47,7 @@ export default function ExaminationDetailPage() {
         if (data) {
           setExamination(data);
           setFormData(data);
+          setPreviewImage(data.imageUrl || null);
         } else {
           toast({
             title: "Error",
@@ -79,6 +84,74 @@ export default function ExaminationDetailPage() {
           ? Number.parseFloat(value) || 0
           : value,
     }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Error",
+        description: "Please select a valid image file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Error",
+        description: "Image size must be less than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Show preview
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setPreviewImage(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    // Upload image to server
+    setIsUploadingImage(true);
+    try {
+      const result = await examinationService.uploadExaminationImage(
+        params.id as string,
+        file
+      );
+      setExamination((prev: any) => ({
+        ...prev,
+        imageUrl: result.imageUrl,
+      }));
+      setFormData((prev: any) => ({
+        ...prev,
+        imageUrl: result.imageUrl,
+      }));
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully",
+      });
+    } catch (error) {
+      console.error("Failed to upload image:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive",
+      });
+      // Reset preview on error
+      setPreviewImage(examination?.imageUrl || null);
+    } finally {
+      setIsUploadingImage(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
 
   const handleSave = async () => {
@@ -153,12 +226,13 @@ export default function ExaminationDetailPage() {
             onClick={() => {
               if (isEditing) {
                 setFormData(examination);
+                setPreviewImage(examination.imageUrl || null);
                 setIsEditing(false);
               } else {
                 setIsEditing(true);
               }
             }}
-            className="gap-2 cursor-pointer"
+            className="gap-2"
           >
             {isEditing ? (
               <>
@@ -182,11 +256,11 @@ export default function ExaminationDetailPage() {
               <CardHeader>
                 <CardTitle className="text-lg">Eye Image</CardTitle>
               </CardHeader>
-              <CardContent>
-                {examination.imageUrl ? (
+              <CardContent className="space-y-4">
+                {previewImage ? (
                   <div className="relative w-full aspect-square bg-muted rounded-lg overflow-hidden">
                     <Image
-                      src={examination.imageUrl || "/placeholder.svg"}
+                      src={previewImage || "/placeholder.svg"}
                       alt="Eye examination image"
                       fill
                       className="object-cover"
@@ -197,6 +271,38 @@ export default function ExaminationDetailPage() {
                     <p className="text-sm text-muted-foreground">
                       No image available
                     </p>
+                  </div>
+                )}
+                {isEditing && (
+                  <div className="space-y-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      disabled={isUploadingImage}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploadingImage}
+                      className="w-full gap-2"
+                    >
+                      {isUploadingImage ? (
+                        <>
+                          <Loader2 className="animate-spin" size={16} />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload size={16} />
+                          Upload New Image
+                        </>
+                      )}
+                    </Button>
                   </div>
                 )}
               </CardContent>
@@ -315,7 +421,7 @@ export default function ExaminationDetailPage() {
                     <Button
                       onClick={handleSave}
                       disabled={isSaving}
-                      className="w-full gap-2 bg-teal-600 hover:bg-teal-700 cursor-pointer"
+                      className="w-full gap-2 bg-teal-600 hover:bg-teal-700"
                     >
                       {isSaving ? (
                         <>

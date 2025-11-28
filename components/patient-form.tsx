@@ -110,7 +110,7 @@ export default function PatientForm({
           <Input
             type="tel"
             name="phone"
-            placeholder="+1 (555) 000-0000"
+            placeholder="+234 (000) 000-0000"
             value={formData.phone}
             onChange={handleChange}
             required

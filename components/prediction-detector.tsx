@@ -51,10 +51,10 @@ export default function PredictionDetector({
       )} percent. `;
     }
 
-    announcement += `Recommendations: `;
-    pred.recommendations.forEach((rec: string, idx: number) => {
-      announcement += `${idx + 1}. ${rec}. `;
-    });
+    // announcement += `Recommendations: `;
+    // pred.recommendations.forEach((rec: string, idx: number) => {
+    //   announcement += `${idx + 1}. ${rec}. `;
+    // });
 
     return announcement;
   };
@@ -142,10 +142,9 @@ export default function PredictionDetector({
               className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
             >
               <option value="">Select an examination</option>
-              {examinations.map((exam) => (
+              {examinations.map((exam: any) => (
                 <option key={exam._id} value={exam._id}>
-                  {new Date(exam.examinationDate).toLocaleDateString()} -{" "}
-                  {exam.notes.substring(0, 30)}...
+                  {exam.patientId.name} - {exam.notes.substring(0, 30)}...
                 </option>
               ))}
             </select>

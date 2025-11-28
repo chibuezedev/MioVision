@@ -42,7 +42,7 @@ export default function HomePage() {
                   Sign In
                 </Button>
               </Link>
-              <Link href="/auth/signup">
+              <Link href="/auth/login">
                 <Button className="bg-primary hover:bg-primary/90b cursor-pointer text-primary-foreground">
                   Get Started
                 </Button>
@@ -70,7 +70,7 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/auth/signup">
+                <Link href="/auth/login">
                   <Button
                     size="lg"
                     className="cursor-pointer bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto gap-2"
