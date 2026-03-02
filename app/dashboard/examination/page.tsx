@@ -17,6 +17,7 @@ export default function ExaminationPage() {
 
   useEffect(() => {
     fetchExaminations();
+     fetch("https://mio-vision-server.vercel.app/api/health-ml").catch(() => {});
   }, [fetchExaminations]);
 
   const filteredExaminations = examinations.filter((e) =>
