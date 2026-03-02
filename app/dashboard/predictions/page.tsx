@@ -15,9 +15,10 @@ export default function PredictionsPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const { predictions, fetchPredictions, isLoading } = usePredictions();
 
-  useEffect(() => {
-    fetchPredictions();
-  }, [fetchPredictions]);
+useEffect(() => {
+  fetchExaminations();
+  fetch("https://mio-vision-server.vercel.app/api/health-ml").catch(() => {});
+}, [fetchExaminations]);
 
   const filteredPredictions = predictions.filter((p) =>
     p.recommendations?.some((rec: string) =>
