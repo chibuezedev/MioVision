@@ -100,11 +100,11 @@ export default function HomePage() {
                     className="w-full h-full object-cover rounded-xl"
                   />
                 </div>
-                <div className="absolute -bottom-4 -right-4 bg-white rounded-lg shadow-lg p-4">
+                {/* <div className="absolute -bottom-4 -right-4 bg-white rounded-lg shadow-lg p-4">
                   <p className="text-sm font-semibold text-gray-900">
                     500+ hospitals worldwide trust MiopiaScan
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

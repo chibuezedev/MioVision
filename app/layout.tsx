@@ -5,9 +5,10 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Providers } from "@/components/providers"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
-const _spaceGrotesk = Space_Grotesk({ subsets: ["latin"] })
+// Import fonts
+const geist = Geist({ subsets: ["latin"] })
+const geistMono = Geist_Mono({ subsets: ["latin"] })
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "MiopiaScan - Hospital Management System",
@@ -28,11 +29,7 @@ export const metadata: Metadata = {
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/favicon-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/favicon-32x32.png",
+        url: "/favicon.svg",
         type: "image/svg+xml",
       },
     ],
@@ -42,12 +39,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans antialiased`}>
+      <body className={`${geist.className} antialiased`}>
         <Providers>{children}</Providers>
         <Analytics />
       </body>

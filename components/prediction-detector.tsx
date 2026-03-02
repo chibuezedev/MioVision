@@ -31,33 +31,46 @@ export default function PredictionDetector({
     fetchExaminations();
   }, [fetchExaminations]);
 
-  const generateAnnouncement = (pred: any): string => {
-    const riskLevel = pred.myopiaRisk || "unknown";
-    const confidence = (pred.confidence * 100).toFixed(1);
-    const sphericalEq = pred.sphericalEquivalent?.toFixed(2) || "0.00";
+  // const generateAnnouncement = (pred: any): string => {
+  //   const riskLevel = pred.myopiaRisk || "unknown";
+  //   const confidence = (pred.confidence * 100).toFixed(1);
+  //   const sphericalEq = pred.sphericalEquivalent?.toFixed(2) || "0.00";
 
-    let announcement = `Myopia prediction complete. `;
-    announcement += `Risk level: ${riskLevel}. `;
-    announcement += `Confidence: ${confidence} percent. `;
-    announcement += `Spherical equivalent: ${sphericalEq} diopters. `;
+  //   let announcement = `Myopia prediction complete. `;
+  //   announcement += `Risk level: ${riskLevel}. `;
+  //   announcement += `Confidence: ${confidence} percent. `;
+  //   announcement += `Spherical equivalent: ${sphericalEq} diopters. `;
 
-    if (pred.mlPrediction) {
-      announcement += `Machine learning prediction indicates ${pred.mlPrediction.toLowerCase()} vision. `;
-    }
+  //   if (pred.mlPrediction) {
+  //     announcement += `Machine learning prediction indicates ${pred.mlPrediction.toLowerCase()} vision. `;
+  //   }
 
-    if (pred.probabilityNormal > 50) {
-      announcement += `Probability of normal vision: ${pred.probabilityNormal.toFixed(
-        1
-      )} percent. `;
-    }
+  //   if (pred.probabilityNormal > 50) {
+  //     announcement += `Probability of normal vision: ${pred.probabilityNormal.toFixed(
+  //       1
+  //     )} percent. `;
+  //   }
 
-    // announcement += `Recommendations: `;
-    // pred.recommendations.forEach((rec: string, idx: number) => {
-    //   announcement += `${idx + 1}. ${rec}. `;
-    // });
+  //   // announcement += `Recommendations: `;
+  //   // pred.recommendations.forEach((rec: string, idx: number) => {
+  //   //   announcement += `${idx + 1}. ${rec}. `;
+  //   // });
 
-    return announcement;
-  };
+  //   return announcement;
+  // };
+
+const generateAnnouncement = (pred: any): string => {
+  const riskLevel = pred.myopiaRisk?.toLowerCase() || "unknown";
+  const detection = pred.mlPrediction?.toLowerCase() || "unknown";
+
+  if ((riskLevel === "high" || riskLevel === "medium") && detection === "myopia") {
+    return "Myopia detected.";
+  } else if ((riskLevel === "low" || riskLevel === "normal" || riskLevel === "none") && detection === "normal") {
+    return "No myopia detected.";
+  } else {
+    return "Myopia prediction unavailable.";
+  }
+};
 
   const announceResults = (pred: any) => {
     if ("speechSynthesis" in window) {
@@ -192,14 +205,14 @@ export default function PredictionDetector({
                       {selectedExamination.rightEyeVision.toFixed(1)}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <span className="text-muted-foreground">
                       Intraocular Pressure:
                     </span>
                     <span className="font-medium">
-                      {selectedExamination.intraocularPressure.toFixed(1)} mmHg
+                      {selectedExamination.intraocularPressure.toFixed(1) | 0 } mmHg
                     </span>
-                  </div>
+                  </div> */}
                   {selectedExamination.notes && (
                     <div className="pt-2 border-t border-border/50">
                       <span className="text-muted-foreground block mb-1">

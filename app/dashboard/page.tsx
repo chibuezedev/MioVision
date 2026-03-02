@@ -109,12 +109,12 @@ export default function DashboardPage() {
           icon: Eye,
           color: "bg-secondary/10 text-secondary",
         },
-        {
-          label: "Detection Rate",
-          value: `${dashboardStats.detectionRate}%`,
-          icon: TrendingUp,
-          color: "bg-green-500/10 text-green-600",
-        },
+        // {
+        //   label: "Detection Rate",
+        //   value: `${dashboardStats.detectionRate}%`,
+        //   icon: TrendingUp,
+        //   color: "bg-green-500/10 text-green-600",
+        // },
       ]
     : [];
 

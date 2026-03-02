@@ -2,6 +2,8 @@
 
 import type React from "react"
 import { useState } from "react"
+import * as tf from '@tensorflow/tfjs';
+import * as mobilenet from '@tensorflow-models/mobilenet';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AlertCircle, CheckCircle } from "lucide-react"
@@ -34,12 +36,65 @@ export default function ExaminationForm({ onSuccess }: ExaminationFormProps) {
     })
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      imageFile: e.target.files ? e.target.files[0] : null,
-    })
+
+const validateIsRetina = async (file: File): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 100;
+      canvas.height = 100;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, 100, 100);
+
+      const { data } = ctx.getImageData(0, 0, 100, 100);
+      let darkPixels = 0;
+      let warmPixels = 0; // red > green > blue (retinal tissue color)
+      let totalPixels = data.length / 4;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const brightness = (r + g + b) / 3;
+
+        if (brightness < 30) darkPixels++;           // black background
+        if (r > 80 && r > g * 1.2 && r > b * 1.5) warmPixels++; // reddish-orange tissue
+      }
+
+      const darkRatio = darkPixels / totalPixels;
+      const warmRatio = warmPixels / totalPixels;
+
+      console.log("Dark ratio:", darkRatio, "Warm ratio:", warmRatio);
+
+      // Retinal image: significant dark border + warm center
+      const isLikelyRetina = warmRatio > 0.35 || (darkRatio > 0.15 && warmRatio > 0.08);
+      resolve(isLikelyRetina);
+    };
+    img.onerror = () => resolve(false);
+  });
+};
+  
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  console.log("File selected:", file?.name);
+  if (!file) return;
+
+  setIsLoading(true); // Show a loader while TF processes
+  setError("");
+
+  const isValid = await validateIsRetina(file);
+
+  if (!isValid) {
+    setError("Error: The image does not appear to be a valid retinal scan. Please upload a clear eye image.");
+    setFormData({ ...formData, imageFile: null });
+    e.target.value = ""; // Clear the input field
+  } else {
+    setFormData({ ...formData, imageFile: file });
+    setSuccess("Image validated: Retinal scan detected.");
+    setTimeout(() => setSuccess(""), 3000);
   }
+  setIsLoading(false);
+};
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault()
@@ -122,7 +177,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             disabled={isLoading}
           />
         </div>
-        <div>
+        {/* <div>
           <label className="block text-sm font-semibold mb-2">Intraocular Pressure</label>
           <Input
             type="number"
@@ -133,7 +188,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             onChange={handleChange}
             disabled={isLoading}
           />
-        </div>
+        </div> */}
       </div>
 
       <div>
@@ -151,7 +206,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold mb-2">Eye Image (Optional)</label>
+        <label className="block text-sm font-semibold mb-2">Eye Image (needed)</label>
         <Input
           type="file"
           name="imageFile"
