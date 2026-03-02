@@ -38,6 +38,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (user) {
       fetchDashboardData();
+       fetch("https://mio-vision-server.vercel.app/api/health-ml").catch(() => {});
     }
   }, [user]);
 
