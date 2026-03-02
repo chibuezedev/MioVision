@@ -57,8 +57,7 @@ export default function DashboardPage() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-      const API_BASE_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const API_BASE_URL = "https://mio-vision-server.vercel.app";
       const [statsRes, trendsRes] = await Promise.all([
         fetch(`${API_BASE_URL}/api/reports/dashboard-stats`, { headers }),
         fetch(`${API_BASE_URL}/api/reports/monthly-trends`, { headers }),
