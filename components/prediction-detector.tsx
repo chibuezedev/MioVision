@@ -27,9 +27,10 @@ export default function PredictionDetector({
   const [prediction, setPrediction] = useState<any>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  useEffect(() => {
-    fetchExaminations();
-  }, [fetchExaminations]);
+useEffect(() => {
+  fetchExaminations();
+  fetch("https://mio-vision-server.vercel.app/api/health-ml").catch(() => {});
+}, [fetchExaminations]);
 
   // const generateAnnouncement = (pred: any): string => {
   //   const riskLevel = pred.myopiaRisk || "unknown";
