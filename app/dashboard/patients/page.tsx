@@ -17,6 +17,7 @@ export default function PatientsPage() {
 
   useEffect(() => {
     fetchPatients();
+     fetch("https://mio-vision-server.vercel.app/api/health-ml").catch(() => {});
   }, []);
 
   const filteredPatients = patients.filter(
