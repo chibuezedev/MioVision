@@ -7,7 +7,7 @@ export const predictionService = {
   async createPrediction(examinationId: string): Promise<any> {
     const response = await fetch(
       `${
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
+        "https://mio-vision-server.vercel.app/api"
       }/predictions/examinations/${examinationId}/predict`,
       {
         method: "POST",

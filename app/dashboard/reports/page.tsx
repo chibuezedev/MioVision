@@ -47,7 +47,7 @@ export default function ReportsPage() {
         Authorization: `Bearer ${token}`,
       };
 
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const baseUrl = "https://mio-vision-server.vercel.app";
       const [statsRes, trendsRes, ageRes, patientsRes] = await Promise.all([
         fetch(`${baseUrl}/api/reports/dashboard-stats`, { headers }),
         fetch(`${baseUrl}/api/reports/monthly-trends`, { headers }),
